@@ -74,6 +74,7 @@
                 android:textColor="#000"
                 android:ems="7"
                 android:paddingBottom="10dp"
+
                 />
             </LinearLayout>
         </RelativeLayout>

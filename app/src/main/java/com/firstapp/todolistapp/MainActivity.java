@@ -10,12 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,33 +30,46 @@ public class MainActivity extends AppCompatActivity {
     String month,Title,year,day;
     int currentYear, currentMonth, currentDay;
     Dialog dialog;
+    SQLiteDatabase database;
+    DataModel dataModel;
 
 
-
-    listRecyclerAdapter adapter= new listRecyclerAdapter(this, arrTitle);
+    listRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Linking database here
+
+                database= new SQLiteDatabase(this);
+
+
     //Finding id of activity main layout and setting recycler view
 
        recyclerList= findViewById(R.id.recyclerList);
+        arrTitle= database.fetchData();
+        adapter= new listRecyclerAdapter(MainActivity.this, arrTitle);
+        recyclerList.setAdapter(adapter);
        addBtn= findViewById(R.id.addBtn);
        noTask= findViewById(R.id.noTask);
+
        recyclerList.setLayoutManager(new LinearLayoutManager(this));
-       recyclerList.setAdapter(adapter);
+
+
        if(arrTitle.size()>0)
            noTask.setVisibility(View.INVISIBLE);
 
        //Getting current date and time from DataModel
-        DataModel dataModel= new DataModel(MainActivity.this);
+        dataModel= new DataModel();
 
         currentYear= dataModel.getYear();
         currentMonth= (dataModel.getMonth());
         currentDay= (dataModel.getDay());
         dialog= new Dialog(this);
+
+
 
 
 
@@ -121,10 +129,15 @@ public class MainActivity extends AppCompatActivity {
                 if(("").equals(date.getText().toString()) || ("".equals(Title)))
                     Toast.makeText(getApplicationContext(), "Please enter all the req field", Toast.LENGTH_LONG).show();
                 else {
-                    arrTitle.add(new DataModel(Title, year, month, day));
+
+                    DataModel dataModel1= new DataModel(Title, year, month, day);
+                    database.insertData(Title, Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day), dataModel1.daysRemained);
+
+                    arrTitle= database.fetchData();
 
                     adapter.notifyItemInserted(arrTitle.size()-1);
-                    recyclerList.scrollToPosition(arrTitle.size() - 1);
+                    recyclerList.scrollToPosition(arrTitle.size()-1);
+
 
                     dialog.dismiss();
                 }
@@ -138,10 +151,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 month= Integer.toString(i1);
 
-                MainActivity.this.year=String.valueOf(i);
-                MainActivity.this.day=String.valueOf(i2);
-
-
+                MainActivity.this.year= Integer.toString(i);
+                MainActivity.this.day= Integer.toString(i2);
 
                 date.setText(wordMonth(i1)+" "+day+", "+year);
             }
