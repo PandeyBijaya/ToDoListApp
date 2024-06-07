@@ -34,7 +34,7 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         holder.itemTitle.setText(arrList.get(position).title);
-        holder.itemDate.setText(arrList.get(position).day);
+        holder.itemDate.setText(arrList.get(position).due);
         holder.daysLeft.setText(arrList.get(position).daysLeft);
 
     }
