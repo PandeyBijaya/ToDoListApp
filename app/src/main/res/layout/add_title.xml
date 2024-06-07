@@ -66,7 +66,25 @@
             />
 
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancelBtn"
+        android:text="Cancel"
+        android:fontFamily="sans-serif-black"
+        android:textSize="20dp"
+        android:textColor="#03A9F4"
+        android:backgroundTint="#FFFFFF"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,9 +94,11 @@
         android:textSize="20dp"
         android:textColor="#03A9F4"
         android:backgroundTint="#FFFFFF"
-        android:layout_gravity="end"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
         />
+    </RelativeLayout>
 
 </LinearLayout>

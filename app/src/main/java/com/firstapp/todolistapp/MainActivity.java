@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<DataModel> arrTitle= new ArrayList<>();
     RecyclerView recyclerList;
     EditText title;
-    TextView date, itemTime;
-    Button commitBtn;
+    TextView date, itemTime,noTask;
+    Button commitBtn, cancelBtn;
     FloatingActionButton addBtn;
     ImageView calendar;
     String month,Title,year,day;
@@ -49,8 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
        recyclerList= findViewById(R.id.recyclerList);
        addBtn= findViewById(R.id.addBtn);
+       noTask= findViewById(R.id.noTask);
        recyclerList.setLayoutManager(new LinearLayoutManager(this));
        recyclerList.setAdapter(adapter);
+       if(arrTitle.size()>0)
+           noTask.setVisibility(View.INVISIBLE);
 
        //Getting current date and time from DataModel
         DataModel dataModel= new DataModel(MainActivity.this);
@@ -69,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                details();
            }
        });
+
+
+
+
+
     }
     public void details()
     {
@@ -80,9 +88,16 @@ public class MainActivity extends AppCompatActivity {
         date= dialog.findViewById(R.id.date);
         itemTime= dialog.findViewById(R.id.itemTime);
         date= dialog.findViewById(R.id.date);
+        cancelBtn= dialog.findViewById(R.id.cancelBtn);
         dialog.show();
 
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         calendar.setOnClickListener(new View.OnClickListener() {
             @Override
