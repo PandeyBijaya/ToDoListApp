@@ -81,7 +81,8 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
         itemLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) context).startIntent();
+
+                ((MainActivity) context).startIntent(arrList.get(position).title,arrList.get(position).year,arrList.get(position).month,arrList.get(position).day,position);
             }
         });
     }

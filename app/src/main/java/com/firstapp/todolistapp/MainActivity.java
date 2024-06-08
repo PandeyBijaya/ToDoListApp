@@ -131,13 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                     DataModel dataModel1= new DataModel(Title, year, month, day);
                     database.insertData(Title, Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day), dataModel1.daysRemained);
-
-                    arrTitle= database.fetchData();
-
-                    adapter.notifyItemInserted(arrTitle.size()-1);
-                    recyclerList.scrollToPosition(arrTitle.size()-1);
-
-
+                    updateRecyclerView();
                     dialog.dismiss();
                 }
             }
@@ -189,18 +183,42 @@ public class MainActivity extends AppCompatActivity {
             return "";
 
         }
-        public Context context()
+        public void startIntent(String Title, String year, String month, String day, int position)
         {
-            return MainActivity.this;
-        }
-        public void startIntent()
-        {
-
-
 
                     Intent intent= new Intent(getApplicationContext(), UpdateActivity.class);
+
+
+
+                    intent.putExtra("title", Title);
+                    intent.putExtra("year", year);
+                    intent.putExtra("month", month);
+                    intent.putExtra("day", day);
+                    intent.putExtra("position", position);
+
                     startActivity(intent);
 
+
+
+        }
+        /*public void updateDelete(String title, int position)
+        {
+            database.deleteTask(title);
+
+            arrTitle.clear();
+            arrTitle= database.fetchData();
+
+            adapter.notifyItemRemoved(position);
+            recyclerList.scrollToPosition(position);
+        }*/
+
+        public void updateRecyclerView()
+        {
+            arrTitle.clear();
+            arrTitle= database.fetchData();
+
+            adapter.notifyItemInserted(arrTitle.size()-1);
+            recyclerList.scrollToPosition(arrTitle.size()-1);
 
         }
  }

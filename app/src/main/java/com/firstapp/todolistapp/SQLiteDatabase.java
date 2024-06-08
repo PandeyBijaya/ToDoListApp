@@ -84,6 +84,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
 
         db.delete(TABLE_NAME, COLUMN_TASK+"= "+title, null);
+        db.close();
     }
 
     public void updateTask(int id, String title, int year, int month, int day, int daysLeft)

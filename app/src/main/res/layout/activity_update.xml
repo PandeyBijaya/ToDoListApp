@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UpdateActivity"
+    android:orientation="vertical"
     >
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,13 +18,60 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hello"
+        android:text="On Progress"
         android:textSize="30dp"
         android:fontFamily="sans-serif-black"
         android:textColor="#000"
         android:id="@+id/updateTitle"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
         />
 
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Due date: "
+        android:textSize="25dp"
+        android:fontFamily="sans-serif-black"
+        android:textColor="#000"
+        android:id="@+id/taskText"
+        android:layout_alignParentLeft="true"
+
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sep 04 2024"
+            android:textSize="25dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#000"
+            android:id="@+id/updateDate"
+            android:ems="5"
+
+            />
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:id="@+id/updateCalendar"
+            android:src="@drawable/baseline_calendar_month_24"
+            android:paddingTop="3dp"
+            />
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DELETE"
+        android:fontFamily="sans-serif-black"
+        android:textSize="20dp"
+        android:textColor="#FFF"
+        android:backgroundTint="#F00"
+        android:id="@+id/updateDelete"
+        />
+
 </LinearLayout>
