@@ -8,9 +8,8 @@ import java.util.Locale;
 
 public class DataModel {
 
-    String title, month, due, daysLeft,year,day;
-    Context context;
-    int daysRemained;
+    String title, month, due,year,day;
+    int daysRemained, id;
     MainActivity mainActivity= new MainActivity();
 
     public DataModel() {
@@ -36,7 +35,13 @@ public class DataModel {
         this.due=(mainActivity.wordMonth(Integer.parseInt(month))+" " +day);
         daysRemained= ((365*(Integer.parseInt(year)-getYear())+30 * Integer.parseInt(month)+Integer.parseInt(day))-30* getMonth() -getDay());
 
-
-
+    }
+    public DataModel(int id, String title, String year, String month, String day)
+    {
+        this.title= title;
+        this.year= year;
+        this.month= month;
+        this.day= day;
+        this.id= id;
     }
 }

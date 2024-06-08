@@ -68,6 +68,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
             dataModel.title= cursor.getString(1);
             dataModel.year= Integer.toString(cursor.getInt(2));
             dataModel.month= Integer.toString(cursor.getInt(3));
+            dataModel.id= cursor.getInt(4);
             dataModel.day= Integer.toString(cursor.getInt(5));
 
             arrList.add(dataModel);
@@ -78,5 +79,25 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         return arrList;
     }
 
+    public void deleteTask(String title)
+    {
+        android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
+
+        db.delete(TABLE_NAME, COLUMN_TASK+"= "+title, null);
+    }
+
+    public void updateTask(int id, String title, int year, int month, int day, int daysLeft)
+    {
+        android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
+
+        ContentValues values= new ContentValues();
+        values.put(COLUMN_TASK, title);
+        values.put(COLUMN_YEAR,year);
+        values.put(COLUMN_MONTH,month);
+        values.put(COLUMN_DAYS,day);
+        values.put(COLUMN_DAYSLEFT,daysLeft);
+
+        db.update(TABLE_NAME, values, ID+"= "+id, null);
+    }
 
 }

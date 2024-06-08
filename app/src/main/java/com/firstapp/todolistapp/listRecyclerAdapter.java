@@ -1,12 +1,15 @@
 package com.firstapp.todolistapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
     Context context;
     ArrayList<DataModel> arrList= new ArrayList<>();
     MainActivity mainActivity= new MainActivity();
+    LinearLayout itemLL;
+
     public listRecyclerAdapter(Context context, ArrayList<DataModel> arrList)
     {
         this.context= context;
@@ -67,10 +72,18 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
             daysLeft= "("+Integer.toString(daysRemained)+" days left)";
         }
 
+
+
+
         holder.itemTitle.setText(arrList.get(position).title);
         holder.itemDate.setText(date);
         holder.daysLeft.setText(daysLeft);
-
+        itemLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) context).startIntent();
+            }
+        });
     }
 
     @Override
@@ -85,6 +98,7 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
             itemTitle= itemView.findViewById(R.id.itemText);
             itemDate= itemView.findViewById(R.id.itemTime);
             daysLeft= itemView.findViewById(R.id.itemTimeleft);
+            itemLL= itemView.findViewById(R.id.itemLL);
         }
     }
 }
