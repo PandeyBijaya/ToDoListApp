@@ -40,7 +40,8 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
-        DataModel dataModel= new DataModel(arrList.get(position).title, arrList.get(position).year ,arrList.get(position).month ,arrList.get(position).day);
+        int i= holder.getAdapterPosition();
+        DataModel dataModel= new DataModel(arrList.get(i).title, arrList.get(i).year ,arrList.get(i).month ,arrList.get(i).day);
 
         String date= dataModel.due;
 
@@ -75,14 +76,16 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
 
 
 
-        holder.itemTitle.setText(arrList.get(position).title);
+        holder.itemTitle.setText(arrList.get(i).title);
         holder.itemDate.setText(date);
         holder.daysLeft.setText(daysLeft);
         itemLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                ((MainActivity) context).startIntent(arrList.get(position).title,arrList.get(position).year,arrList.get(position).month,arrList.get(position).day,position);
+
+                ((MainActivity) context).startIntent(arrList.get(i).title,arrList.get(i).year,arrList.get(i).month,arrList.get(i).day,i);
+
             }
         });
     }

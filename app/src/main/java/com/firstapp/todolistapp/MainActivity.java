@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //Linking database here
 
                 database= new SQLiteDatabase(this);
+                new UpdateActivity().setContext(getApplicationContext());
 
 
     //Finding id of activity main layout and setting recycler view
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
                     DataModel dataModel1= new DataModel(Title, year, month, day);
                     database.insertData(Title, Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day), dataModel1.daysRemained);
-                    updateRecyclerView();
+                    addInRecyclerView();
                     dialog.dismiss();
                 }
             }
@@ -196,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("day", day);
                     intent.putExtra("position", position);
 
+
+
                     startActivity(intent);
 
 
@@ -212,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             recyclerList.scrollToPosition(position);
         }*/
 
-        public void updateRecyclerView()
+        public void addInRecyclerView()
         {
             arrTitle.clear();
             arrTitle= database.fetchData();
@@ -221,5 +224,23 @@ public class MainActivity extends AppCompatActivity {
             recyclerList.scrollToPosition(arrTitle.size()-1);
 
         }
+    public void changeInRecyclerView()
+    {
+        arrTitle.clear();
+        arrTitle= database.fetchData();
+
+        adapter.notifyItemChanged(arrTitle.size()-1);
+        recyclerList.scrollToPosition(arrTitle.size()-1);
+
+    }
+    public void removeInRecyclerView()
+    {
+        arrTitle.clear();
+        arrTitle= database.fetchData();
+
+        adapter.notifyItemRemoved(arrTitle.size()-1);
+        recyclerList.scrollToPosition(arrTitle.size()-1);
+
+    }
  }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,13 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class UpdateActivity extends AppCompatActivity {
     String Title,year,month,day;
-    Context context;
     int position;
     TextView updateTitle, updateDate;
     DataModel dataModel;
     Button updateDelete;
     SQLiteDatabase database;
-    MainActivity mainActivity;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +47,30 @@ public class UpdateActivity extends AppCompatActivity {
         updateDate.setText(dataModel.due+" "+year);
 
         //Deleting Task undergoing
-       /* database= new SQLiteDatabase(this);
+        database= new SQLiteDatabase(this);
         updateDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteTask();
             }
-        });*/
-        //Deleting Task Complete
-    }
+        });
 
-    /*public UpdateActivity(Context context, String title, String year, String month, String day)
+    }
+    //Deleting Task Complete
+    public void setContext(Context context)
     {
         this.context= context;
-        this.Title= title;
-        this.year= year;
-        this.month= month;
-        this.day= day;
-    }*/
-
+    }
 
     public void deleteTask()
     {
-        database.deleteTask(Title);
+
+            database.deleteTask(Title);
+
+
+                Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+                startActivity(intent);
+
     }
+
 }

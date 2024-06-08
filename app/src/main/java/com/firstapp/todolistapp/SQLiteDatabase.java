@@ -19,6 +19,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_YEAR="year";
     private static final String COLUMN_MONTH="month";
     private static final String COLUMN_DAYS="days";
+    Context context;
 
 
     ArrayList<DataModel> arrList= new ArrayList<>();
@@ -26,6 +27,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
 
     public SQLiteDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
+        this.context=context;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
     {
         android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
 
-        db.delete(TABLE_NAME, COLUMN_TASK+"= "+title, null);
+        db.delete(TABLE_NAME, COLUMN_TASK+"= ?", new String[]{title});
         db.close();
     }
 
@@ -98,7 +100,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_DAYS,day);
         values.put(COLUMN_DAYSLEFT,daysLeft);
 
-        db.update(TABLE_NAME, values, ID+"= "+id, null);
+        db.update(TABLE_NAME, values, ID+"= "+ID, null);
     }
 
 }
