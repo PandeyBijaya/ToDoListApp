@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -89,18 +90,39 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateTask(int id, String title, int year, int month, int day, int daysLeft)
+    public void updateTask(int id, String newTitle, int year, int month, int day, int daysLeft)
     {
         android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
 
         ContentValues values= new ContentValues();
-        values.put(COLUMN_TASK, title);
+        values.put(COLUMN_TASK, newTitle);
         values.put(COLUMN_YEAR,year);
         values.put(COLUMN_MONTH,month);
         values.put(COLUMN_DAYS,day);
         values.put(COLUMN_DAYSLEFT,daysLeft);
 
-        db.update(TABLE_NAME, values, ID+"= "+ID, null);
+        db.update(TABLE_NAME, values, ID+"= ?", new String[]{Integer.toString(id)});
+
+
+
+        db.close();
+    }
+
+    public int getId(String title)
+    {
+        android.database.sqlite.SQLiteDatabase db= getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT " + ID + " FROM " + TABLE_NAME + " WHERE " + COLUMN_TASK + "=?", new String[]{title});
+        int id=0;
+        while (cursor.moveToNext())
+        {
+            id= cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return id;
+
+
     }
 
 }
