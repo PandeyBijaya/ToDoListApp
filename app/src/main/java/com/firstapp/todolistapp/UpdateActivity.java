@@ -99,12 +99,6 @@ public class UpdateActivity extends AppCompatActivity {
                     updateTitle.setText(title.getText().toString());
 
 
-                    updateLL.setBackgroundColor(Color.BLUE);
-                    taskText.setTextColor(Color.WHITE);
-
-
-
-
 
 
                 updateDate.setOnClickListener(new View.OnClickListener() {
@@ -126,11 +120,9 @@ public class UpdateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        updateLL.setBackgroundColor(Color.WHITE);
-                        taskText.setTextColor(Color.BLACK);
 
 
-                            dataModel1= new DataModel(Title, year, month, day);
+                        dataModel1= new DataModel(Title, year, month, day);
                         title.setText(updateTitle.getText().toString());
 
                         Date.setText(dataModel1.due+" "+year);
@@ -149,6 +141,7 @@ public class UpdateActivity extends AppCompatActivity {
 
 
                         database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.daysRemained);
+                        Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
 
 
 
@@ -162,6 +155,7 @@ public class UpdateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+                Toast.makeText(UpdateActivity.this, "Saved", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
         });
@@ -183,8 +177,10 @@ public class UpdateActivity extends AppCompatActivity {
 
             database.deleteTask(Title);
 
+        Toast.makeText(UpdateActivity.this, "Deleted the task: "+ oldTitle, Toast.LENGTH_SHORT).show();
 
-                Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+
+        Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
                 startActivity(intent);
 
     }

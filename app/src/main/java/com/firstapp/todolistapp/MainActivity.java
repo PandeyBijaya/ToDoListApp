@@ -132,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
                     DataModel dataModel1= new DataModel(Title, year, month, day);
                     database.insertData(Title, Integer.parseInt(year),Integer.parseInt(month),Integer.parseInt(day), dataModel1.daysRemained);
-                    addInRecyclerView();
+                    startIntent(Title, year, month,day,database.getId(Title));
+                    Toast.makeText(MainActivity.this, "Task Added Successfully", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             }
