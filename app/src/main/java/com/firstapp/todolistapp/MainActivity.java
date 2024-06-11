@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -12,7 +13,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialog;
     SQLiteDatabase database;
     DataModel dataModel;
+    Toolbar toolbar;
 
 
     listRecyclerAdapter adapter;
@@ -55,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
         arrTitle= database.fetchData();
         adapter= new listRecyclerAdapter(MainActivity.this, arrTitle);
         recyclerList.setAdapter(adapter);
-       addBtn= findViewById(R.id.addBtn);
-       noTask= findViewById(R.id.noTask);
+        addBtn= findViewById(R.id.addBtn);
+        noTask= findViewById(R.id.noTask);
+        toolbar= findViewById(R.id.toolBar);
 
        recyclerList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -73,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
         dialog= new Dialog(this);
 
 
+        //Setting toolbar
+
+        setSupportActionBar(toolbar);
+
+        if(getSupportActionBar()!= null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        toolbar.setTitle("To Do List");
 
        addBtn.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -243,5 +258,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerList.scrollToPosition(arrTitle.size()-1);
 
     }
- }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()== android.R.id.home)
+        {
+            super.onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
 

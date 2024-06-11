@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,6 +34,7 @@ public class UpdateActivity extends AppCompatActivity {
     Context context;
     ImageView calendarImg;
     LinearLayout updateLL;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class UpdateActivity extends AppCompatActivity {
         calendarImg= findViewById(R.id.calendarImg);
         updateLL= findViewById(R.id.updateLL);
         taskText = findViewById(R.id.taskText);
+        toolbar = findViewById(R.id.toolBar);
+
 
 
 
@@ -70,6 +76,15 @@ public class UpdateActivity extends AppCompatActivity {
         updateDate.setText(Date.getText().toString());
         updateDate.setVisibility(View.INVISIBLE);
         saveBtn.setVisibility(View.INVISIBLE);
+
+        //Setting ToolBar
+        setSupportActionBar(toolbar);
+
+        if(getSupportActionBar()!= null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        toolbar.setTitle("To Do List");
 
         //Deleting Task undergoing
         database= new SQLiteDatabase(this);
@@ -120,30 +135,34 @@ public class UpdateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
+                        if(updateTitle.getText().toString().equals(""))
+                        {
+                            Toast.makeText(UpdateActivity.this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
 
 
-                        dataModel1= new DataModel(Title, year, month, day);
-                        title.setText(updateTitle.getText().toString());
+                            dataModel1 = new DataModel(Title, year, month, day);
+                            title.setText(updateTitle.getText().toString());
 
-                        Date.setText(dataModel1.due+" "+year);
-
-
-                        updateTitle.setVisibility(View.INVISIBLE);
-                        goBackBtn.setVisibility(View.VISIBLE);
-                        title.setVisibility(View.VISIBLE);
-                        updateDate.setVisibility(View.INVISIBLE);
-                        Date.setVisibility(View.VISIBLE);
-                        editBtn.setVisibility(View.VISIBLE);
-                        deleteBtn.setVisibility(View.VISIBLE);
-                        saveBtn.setVisibility(View.INVISIBLE);
+                            Date.setText(dataModel1.due + " " + year);
 
 
+                            updateTitle.setVisibility(View.INVISIBLE);
+                            goBackBtn.setVisibility(View.VISIBLE);
+                            title.setVisibility(View.VISIBLE);
+                            updateDate.setVisibility(View.INVISIBLE);
+                            Date.setVisibility(View.VISIBLE);
+                            editBtn.setVisibility(View.VISIBLE);
+                            deleteBtn.setVisibility(View.VISIBLE);
+                            saveBtn.setVisibility(View.INVISIBLE);
 
 
-                        database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.daysRemained);
-                        Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                            database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.daysRemained);
+                            Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
 
 
+                        }
 
                     }
                 });
@@ -200,6 +219,17 @@ public class UpdateActivity extends AppCompatActivity {
             }
         }, dataModel.getYear(), dataModel.getMonth(), dataModel.getDay());
         datePickerDialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()== android.R.id.home)
+        {
+            Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
