@@ -224,11 +224,25 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()== android.R.id.home)
-        {
-            Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
-            startActivity(intent);
+        if(goBackBtn.getVisibility()== View.VISIBLE) {
+
+            if (item.getItemId() == android.R.id.home) {
+                Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         }
+        else
+        {
+            updateTitle.setVisibility(View.INVISIBLE);
+            goBackBtn.setVisibility(View.VISIBLE);
+            title.setVisibility(View.VISIBLE);
+            updateDate.setVisibility(View.INVISIBLE);
+            Date.setVisibility(View.VISIBLE);
+            editBtn.setVisibility(View.VISIBLE);
+            deleteBtn.setVisibility(View.VISIBLE);
+            saveBtn.setVisibility(View.INVISIBLE);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
