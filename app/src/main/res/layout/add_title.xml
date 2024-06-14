@@ -30,7 +30,7 @@
         android:id="@+id/title"
         android:ems="13"
         android:hint=" Enter Title"
-        android:maxLength="40"
+        android:maxLength="39"
         android:textSize="20dp"
         android:textColor="#000"
         android:background="#FFF"

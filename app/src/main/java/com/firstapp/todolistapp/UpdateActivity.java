@@ -173,15 +173,16 @@ public class UpdateActivity extends AppCompatActivity {
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+
                 Toast.makeText(UpdateActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+
+                newMainActivity();
+
             }
         });
 
 
     }
-
 
 
 
@@ -227,8 +228,7 @@ public class UpdateActivity extends AppCompatActivity {
         if(goBackBtn.getVisibility()== View.VISIBLE) {
 
             if (item.getItemId() == android.R.id.home) {
-                Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-                startActivity(intent);
+                newMainActivity();
             }
         }
         else
@@ -244,6 +244,13 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void newMainActivity() {
+        finish();
+
+        Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
 

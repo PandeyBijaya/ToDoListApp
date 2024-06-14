@@ -2,21 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#000"
+    android:background="#3F51B5"
     android:paddingLeft="2dp"
     android:paddingRight="2dp"
     android:id="@+id/itemLL"
-
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:layout_marginTop="1dp"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:backgroundTint="#FFF"
+        android:backgroundTint="#2196F3"
+        app:cardCornerRadius="10dp"
+        android:elevation="10dp"
 
         >
         <RelativeLayout
@@ -27,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#03A9F4"
+                android:textColor="#FFFFFF"
                 android:maxLength="40"
                 android:textSize="25sp"
                 android:fontFamily="sans-serif-black"
@@ -57,11 +55,12 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp"
                 android:fontFamily="sans-serif-black"
-                android:textColor="#000000"
+                android:textColor="#0BE3FF"
                 android:textSize="20sp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="12dp"
                 android:ems="3"
+                android:gravity="center"
                 />
 
 
@@ -73,9 +72,10 @@
                 android:layout_alignParentBottom="true"
                 android:fontFamily="sans-serif-black"
                 android:textSize="15sp"
-                android:textColor="#000"
+                android:textColor="#0BE3FF"
                 android:ems="7"
                 android:paddingBottom="10dp"
+                android:gravity="center"
 
                 />
             </LinearLayout>

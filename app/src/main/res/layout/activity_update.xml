@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".UpdateActivity"
     android:orientation="vertical"
+    android:background="#3F51B5"
     >
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/design_default_color_primary"
+        android:background="#3F51B5"
         >
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -28,30 +29,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="On Progress"
         android:textSize="30dp"
         android:fontFamily="sans-serif-black"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:id="@+id/Title"
         android:layout_centerHorizontal="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_marginBottom="30dp"
         android:layout_marginTop="10dp"
+        android:maxLength="39"
         />
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="On Progress"
             android:textSize="30dp"
             android:fontFamily="sans-serif-black"
             android:textColor="#000"
             android:id="@+id/updateTitle"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
+            android:paddingBottom="10dp"
             android:background="#FFF"
-            android:ems="5"
+            android:ems="10"
+            android:gravity="center"
+            android:maxLength="39"
             />
 
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,10 +70,11 @@
         android:text="Due date: "
         android:textSize="25dp"
         android:fontFamily="sans-serif-black"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:id="@+id/taskText"
         android:layout_alignParentLeft="true"
-
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="20dp"
         />
         <RelativeLayout
             android:layout_width="match_parent"
@@ -76,40 +83,73 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sep 04 2024"
             android:textSize="25dp"
             android:fontFamily="sans-serif-black"
-            android:textColor="#000"
+            android:textColor="#FFFFFF"
             android:id="@+id/Date"
             android:ems="5"
 
             />
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sep 04 2024"
                 android:textSize="25dp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="#000"
                 android:id="@+id/updateDate"
-                android:ems="3"
                 android:background="#FFF"
-
-
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
                 />
         <ImageView
             android:layout_width="35dp"
             android:layout_height="30dp"
             android:id="@+id/calendarImg"
-            android:src="@drawable/baseline_calendar_month_24"
+            android:src="@drawable/white_calendar"
             android:paddingTop="3dp"
             android:layout_toRightOf="@+id/Date"
-            android:background="#FFF"
-
-
+            android:layout_marginLeft="10dp"
             />
         </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAVE"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:backgroundTint="#03A9F4"
+            android:id="@+id/saveBtn"
+
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:fontFamily="sans-serif-black"
+            android:textSize="20dp"
+            android:textColor="#FFF"
+            android:backgroundTint="#03A9F4"
+            android:id="@+id/goBackBtn"
+            />
+    </RelativeLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,6 +159,7 @@
         android:textColor="#000000"
         android:backgroundTint="#DDB8B8"
         android:id="@+id/editBtn"
+        android:layout_gravity="bottom"
         />
     <Button
         android:layout_width="match_parent"
@@ -129,32 +170,10 @@
         android:textColor="#FFF"
         android:backgroundTint="#F00"
         android:id="@+id/deleteBtn"
+        android:layout_gravity="bottom"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SAVE"
-        android:fontFamily="sans-serif-black"
-        android:textSize="20dp"
-        android:textColor="#FFF"
-        android:backgroundTint="#03A9F4"
-        android:id="@+id/saveBtn"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:fontFamily="sans-serif-black"
-        android:textSize="20dp"
-        android:textColor="#FFF"
-        android:backgroundTint="#03A9F4"
-        android:id="@+id/goBackBtn"
-        />
     </RelativeLayout>
 
 

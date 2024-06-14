@@ -63,7 +63,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
     public ArrayList<DataModel> fetchData()
     {
         android.database.sqlite.SQLiteDatabase db= getReadableDatabase();
-        Cursor cursor= db.rawQuery("SELECT * FROM "+ TABLE_NAME, null);
+        Cursor cursor= db.rawQuery("SELECT * FROM "+ TABLE_NAME+ " ORDER BY "+COLUMN_DAYSLEFT+" ASC", null);
 
         while (cursor.moveToNext())
         {

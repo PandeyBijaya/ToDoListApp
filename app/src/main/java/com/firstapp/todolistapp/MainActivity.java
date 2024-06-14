@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void dueTime() {
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
 
+        finish();
 
     }
 }
