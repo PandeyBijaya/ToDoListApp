@@ -2,9 +2,11 @@ package com.firstapp.todolistapp;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<DataModel> arrTitle = new ArrayList<>();
     RecyclerView recyclerList;
     EditText title;
-    TextView date, itemTime, noTask;
+    TextView date, itemTime, noTask, time;
     Button commitBtn, cancelBtn;
     FloatingActionButton addBtn;
-    ImageView calendar;
-    String month, Title, year, day;
-    int currentYear, currentMonth, currentDay;
+    ImageView calendar, clock;
+    String month, Title, year, day, hour, min;
+    int currentYear, currentMonth, currentDay, currentHour, currentMin;
     Dialog dialog;
     SQLiteDatabase database;
     DataModel dataModel;
@@ -57,14 +60,17 @@ public class MainActivity extends AppCompatActivity {
         //Finding id of activity main layout and setting recycler view
 
         recyclerList = findViewById(R.id.recyclerList);
-        arrTitle = database.fetchData();
-        adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
+        recyclerList.setLayoutManager(new LinearLayoutManager(this));
+
+            arrTitle = database.fetchData();
+            adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
+
         recyclerList.setAdapter(adapter);
         addBtn = findViewById(R.id.addBtn);
         noTask = findViewById(R.id.noTask);
         toolbar = findViewById(R.id.toolBar);
 
-        recyclerList.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         if (arrTitle.size() > 0)
@@ -106,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         itemTime = dialog.findViewById(R.id.itemTime);
         date = dialog.findViewById(R.id.date);
         cancelBtn = dialog.findViewById(R.id.cancelBtn);
+        time= dialog.findViewById(R.id.time);
+        clock= dialog.findViewById(R.id.clock);
         dialog.show();
 
 
@@ -130,18 +138,32 @@ public class MainActivity extends AppCompatActivity {
                 dueTime();
             }
         });
+
+        clock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userTime();
+            }
+        });
+
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userTime();
+            }
+        });
+
         commitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity.this.Title = title.getText().toString();
 
-                if (("").equals(date.getText().toString()) || ("".equals(Title)))
+                if (time.getText().toString().isEmpty() || date.getText().toString().isEmpty() || ("".equals(Title)))
                     Toast.makeText(getApplicationContext(), "Please enter all the req field", Toast.LENGTH_LONG).show();
                 else {
-
-                    DataModel dataModel1 = new DataModel(Title, year, month, day);
-                    database.insertData(Title, Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel1.daysRemained);
-                    startIntent(Title, year, month, day, database.getId(Title));
+                    DataModel dataModel1 = new DataModel(Title, year, month, day, hour, min);
+                    database.insertData(Title, Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel1.daysRemained, Integer.parseInt(hour), Integer.parseInt(min));
+                    startIntent(Title, year, month, day, database.getId(Title), hour, min);
                     Toast.makeText(MainActivity.this, "Task Added Successfully", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -149,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     private void dueTime() {
         DatePickerDialog dateDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -173,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startIntent(String Title, String year, String month, String day, int position) {
+    public void startIntent(String Title, String year, String month, String day, int position, String hour, String min) {
 
         Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
 
@@ -183,12 +207,32 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("month", month);
         intent.putExtra("day", day);
         intent.putExtra("position", position);
+        intent.putExtra("hour", hour);
+        intent.putExtra("min", min);
 
 
         startActivity(intent);
 
         finish();
 
+    }
+    private void userTime() {
+
+        TimePickerDialog timePicker= new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+
+                    hour = Integer.toString(i);
+                    min = Integer.toString(i1);
+
+                    time.setText(hour + " hr, " + min + "min");
+
+
+            }
+
+        }, dataModel.getHour(), dataModel.getMin(), true);
+        timePicker.show();
     }
 }
 

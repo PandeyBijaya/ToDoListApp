@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
     android:background="#03A9F4"
     android:gravity="center"
@@ -20,10 +20,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="horizontal"
         >
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleText"
+            android:text="Title: "
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:fontFamily="sans-serif-black"
+            />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,39 +38,105 @@
         android:ems="13"
         android:hint=" Enter Title"
         android:maxLength="39"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="#000"
         android:background="#FFF"
         />
 
-</LinearLayout>
-
+    </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFF"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_marginTop="20dp"
+
         >
-
-
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_calendar_month_24"
-        android:id="@+id/calendar"
+        android:id="@+id/dateText"
+        android:text="Date: "
+        android:textSize="20sp"
+        android:textColor="#FFF"
+        android:fontFamily="sans-serif-black"
+        android:layout_gravity="start"
+
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/date"
-            android:ems="12"
             android:maxLength="40"
+            android:ems="6"
             android:textSize="20dp"
+            android:textColor="#000"
             android:background="#FFF"
             android:paddingLeft="10dp"
+            android:hint="mm dd, yyyy"
             />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/white_calendar"
+            android:id="@+id/calendar"
+            />
+    </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeText"
+            android:text="Time:"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:fontFamily="sans-serif-black"
+            android:layout_gravity="start"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/time"
+                android:maxLength="40"
+                android:ems="6"
+                android:textSize="20dp"
+                android:textColor="#000"
+                android:background="#FFF"
+                android:paddingLeft="10dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_access_time_24"
+                android:id="@+id/clock"
+                />
+        </LinearLayout>
+
 
     </LinearLayout>
     <RelativeLayout

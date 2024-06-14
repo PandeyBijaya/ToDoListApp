@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -40,32 +41,37 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
-        DataModel dataModel= new DataModel(arrList.get(position).title, arrList.get(position).year ,arrList.get(position).month ,arrList.get(position).day);
+        DataModel dataModel= new DataModel(arrList.get(position).title, arrList.get(position).year ,arrList.get(position).month ,arrList.get(position).day, arrList.get(position).hour, arrList.get(position).min);
 
         String date= dataModel.due;
 
         int daysRemained= dataModel.daysRemained;
         String daysLeft;
 
-        if(daysRemained>30 && daysRemained<60)
+        if(daysRemained>=30 && daysRemained<60)
         {
             daysLeft= "(1 month left)";
         }
-        else if(daysRemained>60 && daysRemained<90)
+        else if(daysRemained>=60 && daysRemained<90)
         {
             daysLeft= "(2 months left)";
         }
-        else if(daysRemained>90 && daysRemained<365)
+        else if(daysRemained>=90 && daysRemained<365)
         {
             daysLeft= "(>3 months left)";
         }
-        else if(daysRemained>365)
+        else if(daysRemained>=365)
         {
             daysLeft= "(>1 year left)";
         }
-        else if(daysRemained<=0)
+        else if(daysRemained<0)
         {
             daysLeft= "(No Time Left)";
+        }
+        else if(daysRemained<1 && daysRemained>=0)
+        {
+            date= "Today";
+            daysLeft= dataModel.timeLeft;
         }
         else
         {
@@ -83,7 +89,8 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
             public void onClick(View view) {
 
 
-                ((MainActivity) context).startIntent(arrList.get(position).title,arrList.get(position).year,arrList.get(position).month,arrList.get(position).day,position);
+
+                    ((MainActivity) context).startIntent(arrList.get(position).title, arrList.get(position).year, arrList.get(position).month, arrList.get(position).day, position, arrList.get(position).hour, arrList.get(position).min);
 
             }
         });
