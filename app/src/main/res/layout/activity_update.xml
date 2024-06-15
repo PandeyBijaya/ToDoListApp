@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Due date:- "
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-black"
         android:textColor="#FFFFFF"
         android:id="@+id/taskText"
@@ -98,7 +98,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
+            android:textSize="20sp"
             android:fontFamily="sans-serif-black"
             android:textColor="#FFFFFF"
             android:id="@+id/Date"
@@ -108,7 +108,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="#000"
                 android:id="@+id/updateDate"
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Due time:- "
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:fontFamily="sans-serif-black"
             android:textColor="#FFFFFF"
             android:id="@+id/timeText"
@@ -151,7 +151,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="#FFFFFF"
                 android:id="@+id/Time"
@@ -161,7 +161,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25dp"
+                android:textSize="20sp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="#000"
                 android:id="@+id/updateTime"

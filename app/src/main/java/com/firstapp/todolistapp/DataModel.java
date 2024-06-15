@@ -60,7 +60,10 @@ public class DataModel {
         int hourLeft= totalTime/60;
         int minLeft=totalTime%60;
 
-        timeLeft="("+ Integer.toString(hourLeft)+" hr "+ Integer.toString(minLeft)+" min left)";
+        if(totalTime>0)
+            timeLeft="("+ Integer.toString(hourLeft)+" hr "+ Integer.toString(minLeft)+" min left)";
+        else
+            timeLeft="(Due time ended)";
     }
 
 }

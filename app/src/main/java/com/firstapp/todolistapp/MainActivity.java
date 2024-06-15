@@ -1,7 +1,10 @@
 package com.firstapp.todolistapp;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +23,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
 
 
+
     listRecyclerAdapter adapter;
 
     @Override
@@ -53,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Linking database here
 
-        database = new SQLiteDatabase(this);
+        database = new SQLiteDatabase(MainActivity.this);
         new UpdateActivity().setContext(getApplicationContext());
 
 
@@ -62,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerList = findViewById(R.id.recyclerList);
         recyclerList.setLayoutManager(new LinearLayoutManager(this));
 
-            arrTitle = database.fetchData();
-            adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
+        arrTitle = database.fetchData();
+        adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
 
         recyclerList.setAdapter(adapter);
         addBtn = findViewById(R.id.addBtn);
@@ -88,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
         //Setting toolbar
 
         setSupportActionBar(toolbar);
-
-
         toolbar.setTitle("To Do List");
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
                 details();
             }
         });
+
+        //Setting the notifications here
+
+
 
 
     }
@@ -202,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
 
 
+        int id= database.getId(Title);
+
         intent.putExtra("title", Title);
         intent.putExtra("year", year);
         intent.putExtra("month", month);
@@ -209,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("position", position);
         intent.putExtra("hour", hour);
         intent.putExtra("min", min);
+
 
 
         startActivity(intent);
@@ -226,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                     hour = Integer.toString(i);
                     min = Integer.toString(i1);
 
-                    time.setText(hour + " hr, " + min + "min");
+                    time.setText(hour + ":" + min);
 
 
             }
@@ -234,5 +246,7 @@ public class MainActivity extends AppCompatActivity {
         }, dataModel.getHour(), dataModel.getMin(), true);
         timePicker.show();
     }
+
+
 }
 
