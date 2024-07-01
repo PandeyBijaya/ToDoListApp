@@ -4,40 +4,15 @@ import android.content.Context;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class DataModel {
 
-    String title, month, due,year,day,timeLeft, hour, min;
-    int daysRemained, id;
+    String title, month,year,day, hour, min;
     MainActivity mainActivity= new MainActivity();
-
-    public DataModel() {
-    }
-
-    public int getDay(){
-        return Integer.parseInt(new SimpleDateFormat("dd",Locale.getDefault()).format(new Date()));
-
-    }
-    public int getMonth()
-    {
-        return Integer.parseInt((new SimpleDateFormat("MM",Locale.getDefault()).format(new Date())))-1;
-
-    }
-    public int getYear()
-    {
-        return Integer.parseInt(new SimpleDateFormat("yyyy",Locale.getDefault()).format(new Date()));
-
-    }
-    public int getMin(){
-        return Integer.parseInt(new SimpleDateFormat("mm",Locale.getDefault()).format(new Date()));
-
-    }
-    public int getHour(){
-        return Integer.parseInt(new SimpleDateFormat("HH",Locale.getDefault()).format(new Date()));
-
-    }
+    Calendar cal= Calendar.getInstance();
 
     public DataModel(String title, String year, String month, String day, String hour, String min)
     {
@@ -47,23 +22,36 @@ public class DataModel {
         this.day= day;
         this.hour= hour;
         this.min= min;
+    }
 
-        int TotalDays= (365*(Integer.parseInt(year))+(30 *( Integer.parseInt(month)))+Integer.parseInt(day));
-        int completedDays= (365*getYear()+(30 *(getMonth()))+getDay());
-        daysRemained= TotalDays- completedDays;
+    public double getDays()
+    {
+        Calendar dummy= Calendar.getInstance();
+        dummy.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(min));
 
-            this.due=(mainActivity.wordMonth(Integer.parseInt(month))+" " +day);
+        long time= (dummy.getTimeInMillis()-cal.getTimeInMillis());
 
+        double TotalHour= (double) Integer.parseInt(hour) + (double) Integer.parseInt(min) /60 - (double)cal.get(Calendar.HOUR_OF_DAY)- (double) cal.get(Calendar.MINUTE) /60;
+        return (double)time/(1000*60*60*24);
+    }
 
-        int totalTime= Integer.parseInt(hour)*60+ Integer.parseInt(min)- 60*getHour()-getMin();
+    public String getDue()
+    {
+        String due=(mainActivity.wordMonth(Integer.parseInt(month))+" " +day);
+        return due;
+    }
+
+    public String getTime()
+    {
+        int totalTime= Integer.parseInt(hour)*60+ Integer.parseInt(min)- 60*cal.get(Calendar.HOUR_OF_DAY)-cal.get(Calendar.MINUTE);
 
         int hourLeft= totalTime/60;
         int minLeft=totalTime%60;
 
         if(totalTime>0)
-            timeLeft="("+ Integer.toString(hourLeft)+" hr "+ Integer.toString(minLeft)+" min left)";
-        else
-            timeLeft="(Due time ended)";
+            return "("+ Integer.toString(hourLeft)+" hr "+ Integer.toString(minLeft)+" min left)";
+
+        return "(Due ended)";
     }
 
 }

@@ -1,5 +1,7 @@
 package com.firstapp.todolistapp;
 
+import static android.Manifest.permission_group.CALENDAR;
+
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase database;
     DataModel dataModel;
     Toolbar toolbar;
+    Calendar cal= Calendar.getInstance();
 
 
 
@@ -57,39 +60,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Linking database here
-
-        database = new SQLiteDatabase(MainActivity.this);
-        new UpdateActivity().setContext(getApplicationContext());
-
-
         //Finding id of activity main layout and setting recycler view
-
         recyclerList = findViewById(R.id.recyclerList);
-        recyclerList.setLayoutManager(new LinearLayoutManager(this));
-
-        arrTitle = database.fetchData();
-        adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
-
-        recyclerList.setAdapter(adapter);
         addBtn = findViewById(R.id.addBtn);
         noTask = findViewById(R.id.noTask);
         toolbar = findViewById(R.id.toolBar);
+        //Linking database here
+        database = new SQLiteDatabase(MainActivity.this);
+        init();
+
+    }
+    public void  init()
+    {
+
+        //Setting RecyclerList
+        recyclerList.setLayoutManager(new LinearLayoutManager(this));
+        arrTitle.clear();
+        arrTitle = database.fetchData();
+        adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
+        recyclerList.setAdapter(adapter);
 
 
 
 
-        if (arrTitle.size() > 0)
+
+        if (!arrTitle.isEmpty())
             noTask.setVisibility(View.INVISIBLE);
 
-        //Getting current date and time from DataModel
-        dataModel = new DataModel();
+        //Getting current date and time
 
-        currentYear = dataModel.getYear();
-        currentMonth = (dataModel.getMonth());
-        currentDay = (dataModel.getDay());
-        dialog = new Dialog(this);
+        currentYear = cal.get(Calendar.YEAR);
+        currentMonth = cal.get(Calendar.MONTH);
+        currentDay = cal.get(Calendar.DAY_OF_MONTH);
+
 
 
         //Setting toolbar
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void details() {
+        dialog = new Dialog(this);
         //Setting dialog and finding ids of listItems
         dialog.setContentView(R.layout.add_title);
         commitBtn = dialog.findViewById(R.id.commitBtn);
@@ -171,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter all the req field", Toast.LENGTH_LONG).show();
                 else {
                     DataModel dataModel1 = new DataModel(Title, year, month, day, hour, min);
-                    database.insertData(Title, Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel1.daysRemained, Integer.parseInt(hour), Integer.parseInt(min));
-                    startIntent(Title, year, month, day, database.getId(Title), hour, min);
+                    database.insertData(Title, Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel1.getDays(), Integer.parseInt(hour), Integer.parseInt(min));
+                    startIntent(Title, year, month, day, hour, min);
                     Toast.makeText(MainActivity.this, "Task Added Successfully", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -206,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startIntent(String Title, String year, String month, String day, int position, String hour, String min) {
+    public void startIntent(String Title, String year, String month, String day, String hour, String min) {
 
         Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
 
@@ -217,15 +221,14 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("year", year);
         intent.putExtra("month", month);
         intent.putExtra("day", day);
-        intent.putExtra("position", position);
         intent.putExtra("hour", hour);
         intent.putExtra("min", min);
 
 
 
         startActivity(intent);
+        init();
 
-        finish();
 
     }
     private void userTime() {
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-        }, dataModel.getHour(), dataModel.getMin(), true);
+        }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         timePicker.show();
     }
 

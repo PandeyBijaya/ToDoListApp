@@ -25,18 +25,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Calendar;
+
 public class UpdateActivity extends AppCompatActivity {
-    String Title,year,month,day,oldTitle, oldDate, hour, min;
-    int position;
+    String Title, year, month, day, oldTitle, oldDate, hour, min;
     TextView title, Date, updateDate, taskText, Time, updateTime;
     EditText updateTitle;
     DataModel dataModel, dataModel1;
-    Button deleteBtn, editBtn, saveBtn,goBackBtn;
+    Button deleteBtn, editBtn, saveBtn, goBackBtn;
     SQLiteDatabase database;
-    Context context;
     ImageView calendarImg, clockImg;
     LinearLayout updateLL;
     Toolbar toolbar;
+    Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,43 +45,41 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
         title = findViewById(R.id.Title);
-        Date= findViewById(R.id.Date);
+        Date = findViewById(R.id.Date);
         updateTitle = findViewById(R.id.updateTitle);
-        updateDate= findViewById(R.id.updateDate);
-        deleteBtn= findViewById(R.id.deleteBtn);
-        editBtn= findViewById(R.id.editBtn);
-        saveBtn= findViewById(R.id.saveBtn);
-        goBackBtn= findViewById(R.id.goBackBtn);
-        calendarImg= findViewById(R.id.calendarImg);
-        updateLL= findViewById(R.id.updateLL);
+        updateDate = findViewById(R.id.updateDate);
+        deleteBtn = findViewById(R.id.deleteBtn);
+        editBtn = findViewById(R.id.editBtn);
+        saveBtn = findViewById(R.id.saveBtn);
+        goBackBtn = findViewById(R.id.goBackBtn);
+        calendarImg = findViewById(R.id.calendarImg);
+        updateLL = findViewById(R.id.updateLL);
         taskText = findViewById(R.id.taskText);
         toolbar = findViewById(R.id.toolBar);
-        Time= findViewById(R.id.Time);
-        updateTime= findViewById(R.id.updateTime);
-        clockImg= findViewById(R.id.clockImg);
-
+        Time = findViewById(R.id.Time);
+        updateTime = findViewById(R.id.updateTime);
+        clockImg = findViewById(R.id.clockImg);
 
 
         //Bundle passing
-        Intent getIntent= getIntent();
+        Intent getIntent = getIntent();
 
-        Title= getIntent.getStringExtra("title");
-        oldTitle= Title;
-        year= getIntent.getStringExtra("year");
-        month= getIntent.getStringExtra("month");
-        day= getIntent.getStringExtra("day");
-        position= getIntent.getIntExtra("position", 0);
-        hour= getIntent.getStringExtra("hour");
-        min= getIntent.getStringExtra("min");
+        Title = getIntent.getStringExtra("title");
+        oldTitle = Title;
+        year = getIntent.getStringExtra("year");
+        month = getIntent.getStringExtra("month");
+        day = getIntent.getStringExtra("day");
+        hour = getIntent.getStringExtra("hour");
+        min = getIntent.getStringExtra("min");
 
-        dataModel= new DataModel(Title, year, month, day, hour, min);
+        dataModel = new DataModel(Title, year, month, day, hour, min);
 
 
         title.setText(Title);
         updateTitle.setVisibility(View.INVISIBLE);
-        Date.setText(dataModel.due+" "+year);
-        Time.setText(hour+":"+ min);
-        oldDate= Date.getText().toString();
+        Date.setText(dataModel.getDue() + " " + year);
+        Time.setText(hour + ":" + min);
+        oldDate = Date.getText().toString();
         updateDate.setText(Date.getText().toString());
         updateDate.setVisibility(View.INVISIBLE);
         updateTime.setVisibility(View.INVISIBLE);
@@ -90,15 +89,15 @@ public class UpdateActivity extends AppCompatActivity {
         //Setting ToolBar
         setSupportActionBar(toolbar);
 
-        if(getSupportActionBar()!= null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         toolbar.setTitle("To Do List");
 
         //Deleting Task undergoing
-        database= new SQLiteDatabase(this);
-        int id= database.getId(oldTitle);
+        database = new SQLiteDatabase(this);
+        int id = database.getId(oldTitle);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,18 +112,18 @@ public class UpdateActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                    updateTitle.setVisibility(View.VISIBLE);
-                    goBackBtn.setVisibility(View.INVISIBLE);
-                    title.setVisibility(View.INVISIBLE);
-                    updateDate.setVisibility(View.VISIBLE);
-                    Date.setVisibility(View.INVISIBLE);
-                    Time.setVisibility(View.INVISIBLE);
-                    editBtn.setVisibility(View.INVISIBLE);
-                    deleteBtn.setVisibility(View.INVISIBLE);
-                    saveBtn.setVisibility(View.VISIBLE);
-                    updateTime.setVisibility(View.VISIBLE);
-                    updateTitle.setText(title.getText().toString());
-                    updateTime.setText(Time.getText().toString());
+                updateTitle.setVisibility(View.VISIBLE);
+                goBackBtn.setVisibility(View.INVISIBLE);
+                title.setVisibility(View.INVISIBLE);
+                updateDate.setVisibility(View.VISIBLE);
+                Date.setVisibility(View.INVISIBLE);
+                Time.setVisibility(View.INVISIBLE);
+                editBtn.setVisibility(View.INVISIBLE);
+                deleteBtn.setVisibility(View.INVISIBLE);
+                saveBtn.setVisibility(View.VISIBLE);
+                updateTime.setVisibility(View.VISIBLE);
+                updateTitle.setText(title.getText().toString());
+                updateTime.setText(Time.getText().toString());
 
 
                 updateDate.setOnClickListener(new View.OnClickListener() {
@@ -160,11 +159,9 @@ public class UpdateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        if(updateTitle.getText().toString().isEmpty())
-                        {
+                        if (updateTitle.getText().toString().isEmpty()) {
                             Toast.makeText(UpdateActivity.this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
 
                             dataModel1 = new DataModel(Title, year, month, day, hour, min);
                             title.setText(updateTitle.getText().toString());
@@ -172,26 +169,23 @@ public class UpdateActivity extends AppCompatActivity {
                             Date.setText(updateDate.getText().toString());
 
 
-                            }
+                        }
 
 
-
-                            updateTitle.setVisibility(View.INVISIBLE);
-                            goBackBtn.setVisibility(View.VISIBLE);
-                            title.setVisibility(View.VISIBLE);
-                            updateDate.setVisibility(View.INVISIBLE);
-                            Date.setVisibility(View.VISIBLE);
-                            editBtn.setVisibility(View.VISIBLE);
-                            deleteBtn.setVisibility(View.VISIBLE);
-                            saveBtn.setVisibility(View.INVISIBLE);
-                            updateTime.setVisibility(View.INVISIBLE);
-                            Time.setVisibility(View.VISIBLE);
-
-
-                            database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.daysRemained,Integer.parseInt(hour),Integer.parseInt(min));
-                            Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
+                        updateTitle.setVisibility(View.INVISIBLE);
+                        goBackBtn.setVisibility(View.VISIBLE);
+                        title.setVisibility(View.VISIBLE);
+                        updateDate.setVisibility(View.INVISIBLE);
+                        Date.setVisibility(View.VISIBLE);
+                        editBtn.setVisibility(View.VISIBLE);
+                        deleteBtn.setVisibility(View.VISIBLE);
+                        saveBtn.setVisibility(View.INVISIBLE);
+                        updateTime.setVisibility(View.INVISIBLE);
+                        Time.setVisibility(View.VISIBLE);
 
 
+                        database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.getDays(), Integer.parseInt(hour), Integer.parseInt(min));
+                        Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -206,82 +200,69 @@ public class UpdateActivity extends AppCompatActivity {
 
                 Toast.makeText(UpdateActivity.this, "Saved", Toast.LENGTH_SHORT).show();
 
-                newMainActivity();
+                finish();
 
             }
         });
-
-
     }
 
 
+    public void deleteTask() {
+
+        database.deleteTask(Title);
+
+        Toast.makeText(UpdateActivity.this, "Deleted the task: " + oldTitle, Toast.LENGTH_SHORT).show();
 
 
-    public void setContext(Context context)
-    {
-        this.context= context;
-    }
-
-    public void deleteTask()
-    {
-
-            database.deleteTask(Title);
-
-        Toast.makeText(UpdateActivity.this, "Deleted the task: "+ oldTitle, Toast.LENGTH_SHORT).show();
-
-
-        Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
-                startActivity(intent);
+        Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
+        startActivity(intent);
 
     }
 
     private void getTime() {
 
-        TimePickerDialog timePickerDialog= new TimePickerDialog(UpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(UpdateActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                UpdateActivity.this.hour= Integer.toString(i);
-                UpdateActivity.this.min= Integer.toString(i1);
+                UpdateActivity.this.hour = Integer.toString(i);
+                UpdateActivity.this.min = Integer.toString(i1);
 
-                updateTime.setText(hour+":"+ min);
+                updateTime.setText(hour + ":" + min);
             }
-        }, 0, 0, true);
+        }, (Calendar.getInstance().get(Calendar.HOUR)), (Calendar.getInstance().get(Calendar.MINUTE)), true);
         timePickerDialog.show();
     }
 
-    public void getDate()
-    {
-        DatePickerDialog datePickerDialog= new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+    public void getDate() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                year= Integer.toString(i);
-                month= Integer.toString(i1);
-                day= Integer.toString(i2);
+                year = Integer.toString(i);
+                month = Integer.toString(i1);
+                day = Integer.toString(i2);
 
-                dataModel1= new DataModel(Title, year, month, day, hour, min);
+                dataModel1 = new DataModel(Title, year, month, day, hour, min);
 
-                if(dataModel1.due.equals("Today"))
-                    updateDate.setText(dataModel1.due);
+                if (dataModel1.getDue().equals("Today"))
+                    updateDate.setText(dataModel1.getDue());
                 else
-                    updateDate.setText(dataModel1.due+" "+year);
+                    updateDate.setText(dataModel1.getDue() + " " + year);
 
 
             }
-        }, dataModel.getYear(), dataModel.getMonth(), dataModel.getDay());
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if(goBackBtn.getVisibility()== View.VISIBLE) {
+        if (goBackBtn.getVisibility() == View.VISIBLE) {
 
             if (item.getItemId() == android.R.id.home) {
-                newMainActivity();
+                finish();
             }
-        }
-        else
-        {
+        } else {
             updateTitle.setVisibility(View.INVISIBLE);
             goBackBtn.setVisibility(View.VISIBLE);
             title.setVisibility(View.VISIBLE);
@@ -290,17 +271,11 @@ public class UpdateActivity extends AppCompatActivity {
             editBtn.setVisibility(View.VISIBLE);
             deleteBtn.setVisibility(View.VISIBLE);
             saveBtn.setVisibility(View.INVISIBLE);
+            updateTime.setVisibility(View.INVISIBLE);
+            Time.setVisibility(View.VISIBLE);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    private void newMainActivity() {
-        finish();
-
-        Intent intent= new Intent(UpdateActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
-
 
 }

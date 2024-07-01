@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapter.ViewHolder> {
 
@@ -43,9 +44,9 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
 
         DataModel dataModel= new DataModel(arrList.get(position).title, arrList.get(position).year ,arrList.get(position).month ,arrList.get(position).day, arrList.get(position).hour, arrList.get(position).min);
 
-        String date= dataModel.due;
+        String date= dataModel.getDue();
 
-        int daysRemained= dataModel.daysRemained;
+        int daysRemained= (int)dataModel.getDays();
         String daysLeft;
 
         if(daysRemained>=30 && daysRemained<60)
@@ -71,11 +72,11 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
         else if(daysRemained<1 && daysRemained>=0)
         {
             date= "Today";
-            daysLeft= dataModel.timeLeft;
+            daysLeft= dataModel.getTime();
         }
         else
         {
-            daysLeft= "("+Integer.toString(daysRemained)+" days left)";
+            daysLeft= "("+String.valueOf(daysRemained)+" days left)";
         }
 
 
@@ -87,11 +88,9 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
         itemLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(context, String.valueOf(dataModel.getDays()), Toast.LENGTH_SHORT).show();
 
-
-
-                    ((MainActivity) context).startIntent(arrList.get(position).title, arrList.get(position).year, arrList.get(position).month, arrList.get(position).day, position, arrList.get(position).hour, arrList.get(position).min);
-
+                ((MainActivity) context).startIntent(arrList.get(position).title, arrList.get(position).year, arrList.get(position).month, arrList.get(position).day, arrList.get(position).hour, arrList.get(position).min);
             }
         });
     }

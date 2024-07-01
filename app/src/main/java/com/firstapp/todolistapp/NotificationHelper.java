@@ -33,6 +33,15 @@ public class NotificationHelper {
 
 
         Intent iBroadCast = new Intent(context, NotificationReceiver.class);
+        iBroadCast.putExtra("title",title);
+        iBroadCast.putExtra("year",String.valueOf(year));
+        iBroadCast.putExtra("month",String.valueOf(month));
+        iBroadCast.putExtra("day",String.valueOf(day));
+        iBroadCast.putExtra("hour",String.valueOf(hour));
+        iBroadCast.putExtra("min",String.valueOf(min));
+        iBroadCast.putExtra("id",id);
+
+
 
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -43,7 +52,7 @@ public class NotificationHelper {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, delay, pi);
     }
-    public void cancelNotif( Context context, int i)
+    public void cancelNotif( Context context, int id)
     {
         AlarmManager alarmManager= (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -52,7 +61,7 @@ public class NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             flags = PendingIntent.FLAG_MUTABLE;
         }
-        PendingIntent pi = PendingIntent.getBroadcast(context, i, iBroadCast, flags);
+        PendingIntent pi = PendingIntent.getBroadcast(context, id, iBroadCast, flags);
         alarmManager.cancel(pi);
         pi.cancel();
     }

@@ -42,7 +42,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(android.database.sqlite.SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE "+TABLE_NAME+"("+ID+" Integer PRIMARY KEY AUTOINCREMENT,"+COLUMN_TASK+" TEXT, "+COLUMN_YEAR+" INTEGER, "+COLUMN_MONTH+ " INTEGER, "+COLUMN_DAYSLEFT+" INTEGER, "+COLUMN_DAYS+" INTEGER," + COLUMN_HOUR+" Integer,"+ COLUMN_MIN+" Integer)");
+        db.execSQL("CREATE TABLE "+TABLE_NAME+"("+ID+" Integer PRIMARY KEY AUTOINCREMENT,"+COLUMN_TASK+" TEXT, "+COLUMN_YEAR+" INTEGER, "+COLUMN_MONTH+ " INTEGER, "+COLUMN_DAYSLEFT+" REAL, "+COLUMN_DAYS+" INTEGER," + COLUMN_HOUR+" Integer,"+ COLUMN_MIN+" Integer)");
 
     }
 
@@ -50,10 +50,10 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
     public void onUpgrade(android.database.sqlite.SQLiteDatabase db, int i, int i1) {
 
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
-
+        onCreate(db);
 
     }
-    public void insertData(String Title, int year, int month, int day, int daysleft, int hour, int min) {
+    public void insertData(String Title, int year, int month, int day, double daysLeft, int hour, int min) {
 
 
         android.database.sqlite.SQLiteDatabase db = getWritableDatabase();
@@ -62,7 +62,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_YEAR, year);
         values.put(COLUMN_MONTH, month);
         values.put(COLUMN_DAYS, day);
-        values.put(COLUMN_DAYSLEFT, daysleft);
+        values.put(COLUMN_DAYSLEFT, daysLeft);
         values.put(COLUMN_HOUR, hour);
         values.put(COLUMN_MIN, min);
 
@@ -88,16 +88,16 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
 
-                DataModel dataModel = new DataModel();
-                dataModel.title = cursor.getString(1);
-                dataModel.year = Integer.toString(cursor.getInt(2));
-                dataModel.month = Integer.toString(cursor.getInt(3));
-                dataModel.id = cursor.getInt(4);
-                dataModel.day = Integer.toString(cursor.getInt(5));
 
-                dataModel.hour = dataModel.min = Integer.toString(cursor.getInt(6));
-                dataModel.min = Integer.toString(cursor.getInt(7));
-                arrList.add(dataModel);
+                String title = cursor.getString(1);
+                String year = Integer.toString(cursor.getInt(2));
+                String month = Integer.toString(cursor.getInt(3));
+                int id = cursor.getInt(4);
+                String day = Integer.toString(cursor.getInt(5));
+
+                String hour =Integer.toString(cursor.getInt(6));
+                String min = Integer.toString(cursor.getInt(7));
+                arrList.add(new DataModel(title, year, month, day, hour, min));
 
             }
             cursor.close();
@@ -121,7 +121,7 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         notificationHelper.cancelNotif(context, getId(title));
     }
 
-    public void updateTask(int id, String newTitle, int year, int month, int day, int daysLeft, int hour, int min)
+    public void updateTask(int id, String newTitle, int year, int month, int day, double daysLeft, int hour, int min)
     {
         android.database.sqlite.SQLiteDatabase db= getWritableDatabase();
 
@@ -234,13 +234,13 @@ public class SQLiteDatabase extends SQLiteOpenHelper {
         db.close();
         return id;
     }
-    public int getDaysLeft(int i) {
+    public double getDaysLeft(int i) {
         android.database.sqlite.SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT " + COLUMN_DAYSLEFT + " FROM " + TABLE_NAME + " WHERE " + ID + "=?", new String[]{String.valueOf(i)});
-        int id = 0;
+        double id = 0;
         while (cursor.moveToNext()) {
-            id = cursor.getInt(0);
+            id = cursor.getDouble(0);
         }
         cursor.close();
         db.close();
