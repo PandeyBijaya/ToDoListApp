@@ -11,7 +11,6 @@ import java.util.Locale;
 public class DataModel {
 
     String title, month,year,day, hour, min;
-    MainActivity mainActivity= new MainActivity();
     Calendar cal= Calendar.getInstance();
 
     public DataModel(String title, String year, String month, String day, String hour, String min)
@@ -31,13 +30,12 @@ public class DataModel {
 
         long time= (dummy.getTimeInMillis()-cal.getTimeInMillis());
 
-        double TotalHour= (double) Integer.parseInt(hour) + (double) Integer.parseInt(min) /60 - (double)cal.get(Calendar.HOUR_OF_DAY)- (double) cal.get(Calendar.MINUTE) /60;
         return (double)time/(1000*60*60*24);
     }
 
     public String getDue()
     {
-        String due=(mainActivity.wordMonth(Integer.parseInt(month))+" " +day);
+        String due=wordMonth(Integer.parseInt(month))+" " +day;
         return due;
     }
 
@@ -52,6 +50,12 @@ public class DataModel {
             return "("+ Integer.toString(hourLeft)+" hr "+ Integer.toString(minLeft)+" min left)";
 
         return "(Due ended)";
+    }
+    public String wordMonth(int i1) {
+
+        String[] mon= new String[]{"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+        return mon[i1];
+
     }
 
 }

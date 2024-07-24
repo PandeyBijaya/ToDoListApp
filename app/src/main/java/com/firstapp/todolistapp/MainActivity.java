@@ -37,7 +37,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<DataModel> arrTitle = new ArrayList<>();
+    ArrayList<TaskData> arrTitle;
     RecyclerView recyclerList;
     EditText title;
     TextView date, itemTime, noTask, time;
@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     int currentYear, currentMonth, currentDay, currentHour, currentMin;
     Dialog dialog;
     SQLiteDatabase database;
-    DataModel dataModel;
     Toolbar toolbar;
     Calendar cal= Calendar.getInstance();
+    DatabaseHelper databaseHelper;
 
 
 
@@ -67,17 +67,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolBar);
         //Linking database here
         database = new SQLiteDatabase(MainActivity.this);
+        arrTitle = new ArrayList<TaskData>();
         init();
 
     }
     public void  init()
     {
-
         //Setting RecyclerList
+        databaseHelper= DatabaseHelper.getDB(MainActivity.this);
         recyclerList.setLayoutManager(new LinearLayoutManager(this));
         arrTitle.clear();
-        arrTitle = database.fetchData();
+        arrTitle = (ArrayList<TaskData>) databaseHelper.taskDao().fetchData();
         adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
+
         recyclerList.setAdapter(adapter);
 
 
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void details() {
-        dialog = new Dialog(this);
+        dialog = new Dialog(MainActivity.this);
         //Setting dialog and finding ids of listItems
         dialog.setContentView(R.layout.add_title);
         commitBtn = dialog.findViewById(R.id.commitBtn);
@@ -174,11 +176,12 @@ public class MainActivity extends AppCompatActivity {
                 if (time.getText().toString().isEmpty() || date.getText().toString().isEmpty() || ("".equals(Title)))
                     Toast.makeText(getApplicationContext(), "Please enter all the req field", Toast.LENGTH_LONG).show();
                 else {
-                    DataModel dataModel1 = new DataModel(Title, year, month, day, hour, min);
-                    database.insertData(Title, Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel1.getDays(), Integer.parseInt(hour), Integer.parseInt(min));
-                    startIntent(Title, year, month, day, hour, min);
+                    TaskData data= new TaskData(Title, year, month, day, hour, min );
+                    databaseHelper.taskDao().insertData(data);
+                    startIntent(data);
                     Toast.makeText(MainActivity.this, "Task Added Successfully", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
+                    init();
                 }
             }
         });
@@ -210,21 +213,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void startIntent(String Title, String year, String month, String day, String hour, String min) {
+    public void startIntent(TaskData data) {
 
-        Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
-
-
-        int id= database.getId(Title);
-
-        intent.putExtra("title", Title);
-        intent.putExtra("year", year);
-        intent.putExtra("month", month);
-        intent.putExtra("day", day);
-        intent.putExtra("hour", hour);
-        intent.putExtra("min", min);
+        Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
 
 
+        intent.putExtra("id", data.getId());
+        intent.putExtra("title", data.getTitle());
+        intent.putExtra("year", data.getYear());
+        intent.putExtra("month", data.getMonth());
+        intent.putExtra("day", data.getDay());
+        intent.putExtra("hour", data.getHour());
+        intent.putExtra("min", data.getMin());
 
         startActivity(intent);
         init();

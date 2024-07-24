@@ -1,7 +1,6 @@
 package com.firstapp.todolistapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +9,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<DataModel> arrList= new ArrayList<>();
+    ArrayList<TaskData> arrList= new ArrayList<>();
     MainActivity mainActivity= new MainActivity();
     LinearLayout itemLL;
 
-    public listRecyclerAdapter(Context context, ArrayList<DataModel> arrList)
+    public listRecyclerAdapter(Context context, ArrayList<TaskData> arrList)
     {
         this.context= context;
         this.arrList= arrList;
@@ -39,10 +36,10 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int posiition) {
 
-
-        DataModel dataModel= new DataModel(arrList.get(position).title, arrList.get(position).year ,arrList.get(position).month ,arrList.get(position).day, arrList.get(position).hour, arrList.get(position).min);
+        int position= holder.getAdapterPosition();
+        DataModel dataModel= new DataModel(arrList.get(position).getTitle(), arrList.get(position).getYear() ,arrList.get(position).getMonth() ,arrList.get(position).getDay(), arrList.get(position).getHour(), arrList.get(position).getMin());
 
         String date= dataModel.getDue();
 
@@ -88,9 +85,8 @@ public class listRecyclerAdapter extends RecyclerView.Adapter<listRecyclerAdapte
         itemLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, String.valueOf(dataModel.getDays()), Toast.LENGTH_SHORT).show();
-
-                ((MainActivity) context).startIntent(arrList.get(position).title, arrList.get(position).year, arrList.get(position).month, arrList.get(position).day, arrList.get(position).hour, arrList.get(position).min);
+                TaskData taskData= arrList.get(position);
+                ((MainActivity) context).startIntent(taskData);
             }
         });
     }

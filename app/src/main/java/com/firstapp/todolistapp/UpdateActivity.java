@@ -32,12 +32,14 @@ public class UpdateActivity extends AppCompatActivity {
     TextView title, Date, updateDate, taskText, Time, updateTime;
     EditText updateTitle;
     DataModel dataModel, dataModel1;
+    static TaskData taskData;
     Button deleteBtn, editBtn, saveBtn, goBackBtn;
     SQLiteDatabase database;
     ImageView calendarImg, clockImg;
     LinearLayout updateLL;
     Toolbar toolbar;
     Calendar cal = Calendar.getInstance();
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +73,10 @@ public class UpdateActivity extends AppCompatActivity {
         day = getIntent.getStringExtra("day");
         hour = getIntent.getStringExtra("hour");
         min = getIntent.getStringExtra("min");
+        int id=  getIntent.getIntExtra("id",0);
 
         dataModel = new DataModel(Title, year, month, day, hour, min);
-
+        taskData= new TaskData(id,Title, year, month, day, hour, min);
 
         title.setText(Title);
         updateTitle.setVisibility(View.INVISIBLE);
@@ -93,11 +96,10 @@ public class UpdateActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        toolbar.setTitle("To Do List");
 
         //Deleting Task undergoing
         database = new SQLiteDatabase(this);
-        int id = database.getId(oldTitle);
+        databaseHelper= DatabaseHelper.getDB(this);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,11 +161,10 @@ public class UpdateActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
+
                         if (updateTitle.getText().toString().isEmpty()) {
                             Toast.makeText(UpdateActivity.this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
-
-                            dataModel1 = new DataModel(Title, year, month, day, hour, min);
                             title.setText(updateTitle.getText().toString());
                             Time.setText(updateTime.getText().toString());
                             Date.setText(updateDate.getText().toString());
@@ -183,8 +184,7 @@ public class UpdateActivity extends AppCompatActivity {
                         updateTime.setVisibility(View.INVISIBLE);
                         Time.setVisibility(View.VISIBLE);
 
-
-                        database.updateTask(id, title.getText().toString(), Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day), dataModel.getDays(), Integer.parseInt(hour), Integer.parseInt(min));
+                        databaseHelper.taskDao().updateTask(taskData);
                         Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
 
 
@@ -209,7 +209,9 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void deleteTask() {
 
-        database.deleteTask(Title);
+
+
+        databaseHelper.taskDao().deleteTask(taskData);
 
         Toast.makeText(UpdateActivity.this, "Deleted the task: " + oldTitle, Toast.LENGTH_SHORT).show();
 
@@ -227,6 +229,10 @@ public class UpdateActivity extends AppCompatActivity {
                 UpdateActivity.this.hour = Integer.toString(i);
                 UpdateActivity.this.min = Integer.toString(i1);
 
+                taskData.min=min;
+                taskData.hour=hour;
+                taskData.daysRemained= taskData.setDaysRemained();
+
                 updateTime.setText(hour + ":" + min);
             }
         }, (Calendar.getInstance().get(Calendar.HOUR)), (Calendar.getInstance().get(Calendar.MINUTE)), true);
@@ -242,6 +248,12 @@ public class UpdateActivity extends AppCompatActivity {
                 day = Integer.toString(i2);
 
                 dataModel1 = new DataModel(Title, year, month, day, hour, min);
+
+                taskData.year= year;
+                taskData.month=month;
+                taskData.day=day;
+                taskData.daysRemained= taskData.setDaysRemained();
+
 
                 if (dataModel1.getDue().equals("Today"))
                     updateDate.setText(dataModel1.getDue());
