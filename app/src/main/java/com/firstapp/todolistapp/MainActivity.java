@@ -22,6 +22,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -47,11 +51,10 @@ public class MainActivity extends AppCompatActivity {
     String month, Title, year, day, hour, min;
     int currentYear, currentMonth, currentDay, currentHour, currentMin;
     Dialog dialog;
-    SQLiteDatabase database;
     Toolbar toolbar;
     Calendar cal= Calendar.getInstance();
     DatabaseHelper databaseHelper;
-
+    ActivityResultLauncher<Intent> updateLauncher;
 
 
     listRecyclerAdapter adapter;
@@ -60,37 +63,50 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        activateLauncher();
         //Finding id of activity main layout and setting recycler view
         recyclerList = findViewById(R.id.recyclerList);
+        recyclerList.setLayoutManager(new LinearLayoutManager(this));
         addBtn = findViewById(R.id.addBtn);
         noTask = findViewById(R.id.noTask);
         toolbar = findViewById(R.id.toolBar);
-        //Linking database here
-        database = new SQLiteDatabase(MainActivity.this);
-        arrTitle = new ArrayList<TaskData>();
+
         init();
+
+    }
+
+    public void activateLauncher()
+    {
+        updateLauncher= registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+
+                        if(result.getResultCode()==RESULT_OK)
+                        {
+                            init();
+                        }
+                    }
+                }
+        );
 
     }
     public void  init()
     {
         //Setting RecyclerList
         databaseHelper= DatabaseHelper.getDB(MainActivity.this);
-        recyclerList.setLayoutManager(new LinearLayoutManager(this));
-        arrTitle.clear();
+        arrTitle = new ArrayList<TaskData>();
         arrTitle = (ArrayList<TaskData>) databaseHelper.taskDao().fetchData();
         adapter = new listRecyclerAdapter(MainActivity.this, arrTitle);
-
         recyclerList.setAdapter(adapter);
 
 
-
-
-
-        if (!arrTitle.isEmpty())
-            noTask.setVisibility(View.INVISIBLE);
+        if (arrTitle.isEmpty())
+            noTask.setVisibility(View.VISIBLE);
 
         //Getting current date and time
-
         currentYear = cal.get(Calendar.YEAR);
         currentMonth = cal.get(Calendar.MONTH);
         currentDay = cal.get(Calendar.DAY_OF_MONTH);
@@ -98,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Setting toolbar
-
         setSupportActionBar(toolbar);
         toolbar.setTitle("To Do List");
 
@@ -178,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     TaskData data= new TaskData(Title, year, month, day, hour, min );
                     databaseHelper.taskDao().insertData(data);
+                    NotificationHelper notificationHelper= new NotificationHelper();
+
+                    notificationHelper.scheduleNotif(MainActivity.this, data);
                     startIntent(data);
                     Toast.makeText(MainActivity.this, "Task Added Successfully", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
@@ -226,9 +244,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("hour", data.getHour());
         intent.putExtra("min", data.getMin());
 
-        startActivity(intent);
-        init();
 
+
+        updateLauncher.launch(intent);
 
     }
     private void userTime() {
@@ -250,6 +268,9 @@ public class MainActivity extends AppCompatActivity {
         timePicker.show();
     }
 
-
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+    }
 }
 

@@ -1,8 +1,10 @@
 package com.firstapp.todolistapp;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,12 +36,12 @@ public class UpdateActivity extends AppCompatActivity {
     DataModel dataModel, dataModel1;
     static TaskData taskData;
     Button deleteBtn, editBtn, saveBtn, goBackBtn;
-    SQLiteDatabase database;
     ImageView calendarImg, clockImg;
     LinearLayout updateLL;
     Toolbar toolbar;
     Calendar cal = Calendar.getInstance();
     DatabaseHelper databaseHelper;
+    NotificationHelper notificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class UpdateActivity extends AppCompatActivity {
         Time = findViewById(R.id.Time);
         updateTime = findViewById(R.id.updateTime);
         clockImg = findViewById(R.id.clockImg);
+        notificationHelper= new NotificationHelper();
 
 
         //Bundle passing
@@ -98,7 +101,6 @@ public class UpdateActivity extends AppCompatActivity {
 
 
         //Deleting Task undergoing
-        database = new SQLiteDatabase(this);
         databaseHelper= DatabaseHelper.getDB(this);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,11 +185,6 @@ public class UpdateActivity extends AppCompatActivity {
                         saveBtn.setVisibility(View.INVISIBLE);
                         updateTime.setVisibility(View.INVISIBLE);
                         Time.setVisibility(View.VISIBLE);
-
-                        databaseHelper.taskDao().updateTask(taskData);
-                        Toast.makeText(UpdateActivity.this, "Changes Saved", Toast.LENGTH_SHORT).show();
-
-
                     }
                 });
 
@@ -197,9 +194,11 @@ public class UpdateActivity extends AppCompatActivity {
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                databaseHelper.taskDao().updateTask(taskData);
+                notificationHelper.cancelNotif(UpdateActivity.this, taskData.getId());
+                notificationHelper.scheduleNotif(UpdateActivity.this, taskData);
                 Toast.makeText(UpdateActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-
+                setResult(RESULT_OK);
                 finish();
 
             }
@@ -209,16 +208,28 @@ public class UpdateActivity extends AppCompatActivity {
 
     public void deleteTask() {
 
+        AlertDialog.Builder deleteConfirmation= new AlertDialog.Builder(UpdateActivity.this)
+                .setTitle("Delete Task")
+                .setMessage("Are you sure you want to delete the task?")
+                .setIcon(R.drawable.baseline_auto_delete_24)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        databaseHelper.taskDao().deleteTask(taskData);
+                        notificationHelper.cancelNotif(UpdateActivity.this, taskData.getId());
+                        Toast.makeText(UpdateActivity.this, "Deleted the task: " + oldTitle, Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-
-        databaseHelper.taskDao().deleteTask(taskData);
-
-        Toast.makeText(UpdateActivity.this, "Deleted the task: " + oldTitle, Toast.LENGTH_SHORT).show();
-
-
-        Intent intent = new Intent(UpdateActivity.this, MainActivity.class);
-        startActivity(intent);
-
+                    }
+                })
+                ;
+        deleteConfirmation.show();
     }
 
     private void getTime() {
@@ -272,7 +283,12 @@ public class UpdateActivity extends AppCompatActivity {
         if (goBackBtn.getVisibility() == View.VISIBLE) {
 
             if (item.getItemId() == android.R.id.home) {
+                Intent goBack= new Intent();
+                goBack.putExtra("data", "done");
+                Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED, goBack);
                 finish();
+
             }
         } else {
             updateTitle.setVisibility(View.INVISIBLE);

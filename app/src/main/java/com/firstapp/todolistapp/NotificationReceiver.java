@@ -54,7 +54,7 @@ public class NotificationReceiver extends BroadcastReceiver {
              notification = new Notification.Builder(context, CHANNEL_ID)
                     .setContentText("DUE ENDED FOR "+Title)
                     .setSubText("Ye, times up! Did you complete your work?")
-                     .setContentIntent(pi)
+                    .setContentIntent(pi)
                     .setSmallIcon(R.drawable.baseline_access_time_24)
                     .build();
             nm.createNotificationChannel(new NotificationChannel(CHANNEL_ID, "TASK_NOTIFY", NotificationManager.IMPORTANCE_HIGH));
