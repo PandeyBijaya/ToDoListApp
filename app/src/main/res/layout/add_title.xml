@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         >
         <TextView
             android:layout_width="wrap_content"
@@ -33,10 +34,9 @@
             />
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="50sp"
+        android:layout_height="wrap_content"
         android:id="@+id/title"
         android:ems="13"
-        android:hint=" Enter Title"
         android:maxLength="39"
         android:textSize="20sp"
         android:textColor="#000"
@@ -80,10 +80,10 @@
             android:textSize="20dp"
             android:textColor="#000"
             android:background="#FFF"
-            android:paddingLeft="10dp"
-            android:hint="mm dd, yyyy"
+            android:hint=" mm/dd/yyyy"
             />
         <ImageView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/white_calendar"
@@ -127,7 +127,7 @@
                 android:textSize="20dp"
                 android:textColor="#000"
                 android:background="#FFF"
-                android:paddingLeft="10dp"
+                android:hint=" hh/mm"
                 />
             <ImageView
                 android:layout_width="wrap_content"

@@ -30,7 +30,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Calendar;
 
 public class UpdateActivity extends AppCompatActivity {
-    String Title, year, month, day, oldTitle, oldDate, hour, min;
+    String Title, year, month, day, oldDate, hour, min;
+    String oldTitle, oldYear, oldHour, oldMin, oldMonth, oldDay;
     TextView title, Date, updateDate, taskText, Time, updateTime;
     EditText updateTitle;
     DataModel dataModel, dataModel1;
@@ -72,10 +73,15 @@ public class UpdateActivity extends AppCompatActivity {
         Title = getIntent.getStringExtra("title");
         oldTitle = Title;
         year = getIntent.getStringExtra("year");
+        oldYear=year;
         month = getIntent.getStringExtra("month");
+        oldMonth=month;
         day = getIntent.getStringExtra("day");
+        oldDay=day;
         hour = getIntent.getStringExtra("hour");
+        oldHour= hour;
         min = getIntent.getStringExtra("min");
+        oldMin= min;
         int id=  getIntent.getIntExtra("id",0);
 
         dataModel = new DataModel(Title, year, month, day, hour, min);
@@ -162,18 +168,12 @@ public class UpdateActivity extends AppCompatActivity {
                 saveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
                         if (updateTitle.getText().toString().isEmpty()) {
                             Toast.makeText(UpdateActivity.this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
-                        } else {
-                            title.setText(updateTitle.getText().toString());
-                            Time.setText(updateTime.getText().toString());
-                            Date.setText(updateDate.getText().toString());
-
-
                         }
-
+                        title.setText(updateTitle.getText().toString());
+                        Time.setText(updateTime.getText().toString());
+                        Date.setText(updateDate.getText().toString());
 
                         updateTitle.setVisibility(View.INVISIBLE);
                         goBackBtn.setVisibility(View.VISIBLE);
@@ -194,13 +194,9 @@ public class UpdateActivity extends AppCompatActivity {
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseHelper.taskDao().updateTask(taskData);
-                notificationHelper.cancelNotif(UpdateActivity.this, taskData.getId());
-                notificationHelper.scheduleNotif(UpdateActivity.this, taskData);
-                Toast.makeText(UpdateActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                save();
                 setResult(RESULT_OK);
                 finish();
-
             }
         });
     }
@@ -283,11 +279,32 @@ public class UpdateActivity extends AppCompatActivity {
         if (goBackBtn.getVisibility() == View.VISIBLE) {
 
             if (item.getItemId() == android.R.id.home) {
-                Intent goBack= new Intent();
-                goBack.putExtra("data", "done");
-                Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_CANCELED, goBack);
-                finish();
+                AlertDialog.Builder confirmDialog= new AlertDialog.Builder(UpdateActivity.this)
+                        .setMessage("Do you want to discard the changes?")
+                        .setTitle("Discard changes")
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                save();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                setResult(RESULT_CANCELED);
+                                finish();
+                            }
+                        });
+                if(oldHour.equals(hour) && oldMin.equals(min) && oldYear.equals(year) && oldMonth.equals(month) && oldDay.equals(day) && oldTitle.equals(Title))
+                {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+                else
+                {
+                    confirmDialog.show();
+                }
 
             }
         } else {
@@ -304,6 +321,14 @@ public class UpdateActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void save()
+    {
+            databaseHelper.taskDao().updateTask(taskData);
+            notificationHelper.cancelNotif(UpdateActivity.this, taskData.getId());
+            notificationHelper.scheduleNotif(UpdateActivity.this, taskData);
+            setResult(RESULT_OK);
     }
 
 }
